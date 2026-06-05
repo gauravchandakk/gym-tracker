@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Daily Exercise Tracker</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #f7f8fa;
+            --panel: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --line: #d6dbe3;
+            --accent: #0f766e;
+            --accent-dark: #115e59;
+            --danger: #b91c1c;
+            --success: #166534;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        header {
+            border-bottom: 1px solid var(--line);
+            background: var(--panel);
+        }
+
+        .topbar {
+            width: min(1120px, calc(100% - 32px));
+            margin: 0 auto;
+            padding: 18px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        main {
+            width: min(1120px, calc(100% - 32px));
+            margin: 24px auto;
+            display: grid;
+            grid-template-columns: minmax(320px, 420px) 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        section {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        h2 {
+            margin: 0 0 16px;
+            font-size: 18px;
+        }
+
+        form {
+            display: grid;
+            gap: 14px;
+        }
+
+        label {
+            display: grid;
+            gap: 6px;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 10px 12px;
+            color: var(--text);
+            font: inherit;
+            background: #ffffff;
+        }
+
+        textarea {
+            min-height: 88px;
+            resize: vertical;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        button {
+            min-height: 42px;
+            border: 0;
+            border-radius: 6px;
+            background: var(--accent);
+            color: #ffffff;
+            cursor: pointer;
+            font: inherit;
+            font-weight: 700;
+        }
+
+        button:hover {
+            background: var(--accent-dark);
+        }
+
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.65;
+        }
+
+        .status {
+            min-height: 20px;
+            margin: 2px 0 0;
+            font-size: 13px;
+        }
+
+        .status.success {
+            color: var(--success);
+        }
+
+        .status.error {
+            color: var(--danger);
+        }
+
+        .list-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .list-header h2 {
+            margin: 0;
+        }
+
+        .entries {
+            display: grid;
+            gap: 10px;
+        }
+
+        .entry {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 14px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .entry-title {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            font-weight: 700;
+        }
+
+        .entry-meta {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .empty {
+            color: var(--muted);
+            border: 1px dashed var(--line);
+            border-radius: 8px;
+            padding: 18px;
+            text-align: center;
+        }
+
+        @media (max-width: 820px) {
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            main {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="topbar">
+        <h1>Gym Daily Exercise Tracker</h1>
+        <span id="todayLabel"></span>
+    </div>
+</header>
+
+<main>
+    <section aria-labelledby="formTitle">
+        <h2 id="formTitle">Add Exercise</h2>
+        <form id="exerciseForm">
+            <label>
+                Exercise Name
+                <input id="exerciseName" name="exerciseName" type="text" placeholder="Bench Press" required>
+            </label>
+
+            <label>
+                Muscle Group
+                <select id="muscleGroup" name="muscleGroup">
+                    <option value="">Select muscle group</option>
+                    <option value="Chest">Chest</option>
+                    <option value="Back">Back</option>
+                    <option value="Legs">Legs</option>
+                    <option value="Shoulders">Shoulders</option>
+                    <option value="Arms">Arms</option>
+                    <option value="Core">Core</option>
+                    <option value="Cardio">Cardio</option>
+                </select>
+            </label>
+
+            <div class="grid-2">
+                <label>
+                    Sets
+                    <input id="sets" name="sets" type="number" min="1" required>
+                </label>
+
+                <label>
+                    Weight (kg)
+                    <input id="weight" name="weight" type="number" min="0" step="0.5">
+                </label>
+            </div>
+
+            <label>
+                Reps
+                <input id="reps" name="reps" type="text" placeholder="10,12,10">
+            </label>
+
+            <label>
+                Date
+                <input id="date" name="date" type="date" required>
+            </label>
+
+            <label>
+                Notes
+                <textarea id="notes" name="notes" placeholder="Optional notes"></textarea>
+            </label>
+
+            <button id="saveButton" type="submit">Save</button>
+            <p id="status" class="status" role="status"></p>
+        </form>
+    </section>
+
+    <section aria-labelledby="entriesTitle">
+        <div class="list-header">
+            <h2 id="entriesTitle">Exercises For Selected Day</h2>
+            <button id="refreshButton" type="button">Refresh</button>
+        </div>
+        <div id="entries" class="entries"></div>
+    </section>
+</main>
+
+<script>
+    const form = document.getElementById('exerciseForm');
+    const dateInput = document.getElementById('date');
+    const statusEl = document.getElementById('status');
+    const entriesEl = document.getElementById('entries');
+    const saveButton = document.getElementById('saveButton');
+    const refreshButton = document.getElementById('refreshButton');
+    const todayLabel = document.getElementById('todayLabel');
+
+    const today = new Date().toISOString().slice(0, 10);
+    dateInput.value = today;
+    todayLabel.textContent = `Today: ${today}`;
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        await saveExercise();
+    });
+
+    refreshButton.addEventListener('click', loadExercisesForSelectedDate);
+    dateInput.addEventListener('change', loadExercisesForSelectedDate);
+
+    async function saveExercise() {
+        setStatus('', '');
+        saveButton.disabled = true;
+
+        const payload = {
+            exerciseName: document.getElementById('exerciseName').value.trim(),
+            muscleGroup: document.getElementById('muscleGroup').value || null,
+            sets: Number(document.getElementById('sets').value),
+            reps: document.getElementById('reps').value.trim() || null,
+            weight: document.getElementById('weight').value ? Number(document.getElementById('weight').value) : null,
+            notes: document.getElementById('notes').value.trim() || null,
+            date: dateInput.value
+        };
+
+        try {
+            const response = await fetch('/api/exercises', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message || 'Exercise could not be saved');
+            }
+
+            form.reset();
+            dateInput.value = payload.date || today;
+            setStatus('Exercise saved successfully.', 'success');
+            await loadExercisesForSelectedDate();
+        } catch (error) {
+            setStatus(error.message, 'error');
+        } finally {
+            saveButton.disabled = false;
+        }
+    }
+
+    async function loadExercisesForSelectedDate() {
+        entriesEl.innerHTML = '<div class="empty">Loading...</div>';
+
+        try {
+            const response = await fetch(`/api/exercises/date/${dateInput.value}`);
+            if (!response.ok) {
+                throw new Error('Unable to load exercises');
+            }
+
+            const exercises = await response.json();
+            renderEntries(exercises);
+        } catch (error) {
+            entriesEl.innerHTML = `<div class="empty">${escapeHtml(error.message)}</div>`;
+        }
+    }
+
+    function renderEntries(exercises) {
+        if (!exercises.length) {
+            entriesEl.innerHTML = '<div class="empty">No exercises saved for this day.</div>';
+            return;
+        }
+
+        entriesEl.innerHTML = exercises.map((exercise) => `
+            <article class="entry">
+                <div class="entry-title">
+                    <span>${escapeHtml(exercise.exerciseName)}</span>
+                    <span>${escapeHtml(exercise.muscleGroup || 'General')}</span>
+                </div>
+                <div class="entry-meta">
+                    ${exercise.sets} sets${exercise.reps ? ` | reps: ${escapeHtml(exercise.reps)}` : ''}${exercise.weight !== null ? ` | ${exercise.weight} kg` : ''}
+                </div>
+                ${exercise.notes ? `<div>${escapeHtml(exercise.notes)}</div>` : ''}
+            </article>
+        `).join('');
+    }
+
+    function setStatus(message, type) {
+        statusEl.textContent = message;
+        statusEl.className = `status ${type}`;
+    }
+
+    function escapeHtml(value) {
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    loadExercisesForSelectedDate();
+</script>
+</body>
+</html>
