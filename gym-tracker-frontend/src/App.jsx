@@ -1,20 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import HomePage from './pages/HomePage';
-import AddExercisePage from './pages/AddExercisePage';
-import EditExercisePage from './pages/EditExercisePage';
+import Sidebar from './components/Sidebar';
+import DashboardPage from './pages/DashboardPage';
+import WorkoutListPage from './pages/WorkoutListPage';
+import WorkoutDetailPage from './pages/WorkoutDetailPage';
+import ExerciseLibraryPage from './pages/ExerciseLibraryPage';
+import NewWorkoutPage from './pages/NewWorkoutPage';
 
-// App sets up the main layout and route structure for the tracker.
 function App() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
-    <div>
-      <Navbar />
-      <main className="container py-4">
+    <div className="app-shell">
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <button type="button" className="mobile-menu-button" aria-label="Open navigation menu" onClick={() => setSidebarOpen(true)}>
+        ☰
+      </button>
+      <button
+        type="button"
+        className={`sidebar-backdrop ${sidebarOpen ? 'show' : ''}`}
+        aria-label="Close navigation menu"
+        onClick={() => setSidebarOpen(false)}
+      />
+
+      <main className="app-content">
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/add" element={<AddExercisePage />} />
-          <Route path="/edit/:id" element={<EditExercisePage />} />
+          <Route path="/" element={<DashboardPage />} />
+          <Route path="/workouts" element={<WorkoutListPage />} />
+          <Route path="/workouts/:id" element={<WorkoutDetailPage />} />
+          <Route path="/exercises" element={<ExerciseLibraryPage />} />
+          <Route path="/workout/new" element={<NewWorkoutPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>

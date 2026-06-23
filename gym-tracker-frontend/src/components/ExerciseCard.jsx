@@ -1,29 +1,31 @@
 import React from 'react';
-import { formatDate } from '../utils/helpers';
+import MuscleGroupBadge from './MuscleGroupBadge';
+import { getExerciseName } from '../utils/helpers';
 
-// ExerciseCard renders one exercise row inside the table.
-function ExerciseCard({ exercise, onEdit, onDelete, index }) {
+function ExerciseCard({ exercise, onSelect, actionLabel = 'Add Exercise' }) {
   return (
-    <tr>
-      <td>{index}</td>
-      <td>{exercise.exerciseName}</td>
-      <td>{exercise.muscleGroup}</td>
-      <td>{exercise.sets}</td>
-      <td>{exercise.reps}</td>
-      <td>{exercise.weight ?? '-'}</td>
-      <td>{formatDate(exercise.date)}</td>
-      <td>{exercise.notes || '-'}</td>
-      <td>
-        <div className="btn-group btn-group-sm" role="group" aria-label="Exercise actions">
-          <button type="button" className="btn btn-warning" onClick={() => onEdit(exercise)}>
-            Edit
-          </button>
-          <button type="button" className="btn btn-danger" onClick={() => onDelete(exercise)}>
-            Delete
-          </button>
+    <article
+      className="exercise-card"
+      onClick={() => onSelect?.(exercise)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(event) => event.key === 'Enter' && onSelect?.(exercise)}
+    >
+      <div className="section-heading" style={{ marginBottom: 12 }}>
+        <div>
+          <h4>{getExerciseName(exercise)}</h4>
+          <p className="muted" style={{ margin: 0 }}>
+            Built for strong, repeatable work.
+          </p>
         </div>
-      </td>
-    </tr>
+      </div>
+      <MuscleGroupBadge group={exercise?.muscleGroup} />
+      {onSelect ? (
+        <button type="button" className="btn btn-primary" style={{ marginTop: 14 }} onClick={() => onSelect(exercise)}>
+          {actionLabel}
+        </button>
+      ) : null}
+    </article>
   );
 }
 
