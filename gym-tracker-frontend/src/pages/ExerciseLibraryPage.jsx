@@ -89,4 +89,4 @@ function ExerciseLibraryPage() {
   );
 }
 
-export default ExerciseLibraryPage;
+export default ExerciseLibraryPage;.
