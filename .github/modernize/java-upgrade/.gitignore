@@ -1,0 +1,5 @@
+backend/target/
+backend/src/main/resources/application.properties
+*.jar
+*.war
+*.class
