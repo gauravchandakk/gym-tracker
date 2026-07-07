@@ -14,6 +14,7 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("http://localhost:5174");  // React app URL
         config.addAllowedOrigin("http://localhost:5173");
+        config.addAllowedOrigin("https://gym-tracker-beryl-delta.vercel.app");
         config.addAllowedMethod("*");   // GET, POST, PUT, DELETE, OPTIONS
         config.addAllowedHeader("*");   // All headers
         config.setAllowCredentials(true);
